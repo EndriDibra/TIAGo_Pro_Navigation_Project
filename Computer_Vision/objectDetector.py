@@ -1,3 +1,6 @@
+# Author: Endri Dibra
+# Project: This is a task for general object detection and recognition using YOLOv11n AI model
+
 # Importing the required libraries
 import cv2 
 from ultralytics import YOLO
