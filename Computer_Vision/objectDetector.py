@@ -1,3 +1,4 @@
+# Importing the required libraries
 import cv2 
 from ultralytics import YOLO
 
