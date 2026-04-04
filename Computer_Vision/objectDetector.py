@@ -6,7 +6,7 @@ import cv2
 from ultralytics import YOLO
 
 # Using the default camera of the computer system
-camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+camera = cv2.VideoCapture(0)
 
 # Loading the YOLOv11n model for
 # object detection and recognition
