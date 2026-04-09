@@ -24,5 +24,5 @@ Navigation: ROS 2 Nav2 (A* Global / TEB Local)
 
 Environment: Gazebo 3D Office Simulation
 
-Methodology
+Methodology:
 In this project, we treat the costmap as a spatial "brain," assigning values from 0 (free space) to 254 (lethal obstacle). By separating the Static Layer from our Social Inflation Layer, we successfully prevented "thick walls" while maintaining "soft" social buffers. This allows the TIAGo Pro to proactively adjust its trajectory when encountering humans, fostering a transparent and predictable interaction that enhances user trust and comfort in shared spaces.
