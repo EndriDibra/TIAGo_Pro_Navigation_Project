@@ -94,7 +94,7 @@ A ROS 2 node that detects humans and injects them into the navigation stack as d
 
 ---
 
-### Core Python Dependencies
+### Core Python Dependencies for ROS2 (Humble Distro)
 
 ```bash
 pip install numpy
