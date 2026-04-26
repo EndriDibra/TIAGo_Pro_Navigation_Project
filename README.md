@@ -9,160 +9,96 @@
 
 ## Project Overview
 
-This project implements a **social navigation framework** for the :contentReference[oaicite:0]{index=0} within a **ROS 2, Gazebo, and RViz simulation environment**.
+This project implements a **social navigation framework** for the :contentReference[oaicite:0]{index=0} in a **ROS 2, Gazebo, and RViz simulation environment**.
 
-The goal is to move beyond classical obstacle avoidance and instead enable **human-aware navigation**, where the robot behaves in a socially acceptable manner in shared environments.
+The goal is to extend classical robotic navigation into **human-aware motion planning**, where the robot adapts its path based on social context rather than purely geometric constraints.
 
-By integrating real-time computer vision using :contentReference[oaicite:1]{index=1} with the :contentReference[oaicite:2]{index=2} framework, the system dynamically distinguishes between static obstacles and humans, and adapts its navigation behavior accordingly.
-
----
-
-## Key Features
-
-### Vision-Integrated Perception
-- Real-time human detection using YOLOv11n  
-- Conversion of 2D detections into 3D spatial awareness  
-- Multi-person tracking in dynamic environments  
-
-### Layered Costmap Dynamics
-- Extension of the ROS 2 costmap system  
-- Dedicated **Social Inflation Layer**  
-- Separation of:
-  - Static obstacles (walls, furniture)
-  - Dynamic social agents (humans)
-
-### Optimized Path Planning
-- Global planning using A* algorithm  
-- Local trajectory optimization using TEB (Timed Elastic Band) planner  
-- Smooth, collision-free, and socially compliant motion  
-
-### Balanced Social Inflation Strategy
-- Tuned inflation radius: **0.55m**  
-- Represents a “social comfort zone”  
-- Balances:
-  - Human safety and comfort  
-  - Robot agility in narrow spaces  
-
-### Simulation Environment
-- :contentReference[oaicite:3]{index=3} for physics-based testing  
-- :contentReference[oaicite:4]{index=4} for perception and navigation debugging  
-- Real-time interaction with dynamic human agents  
+The system integrates real-time perception using :contentReference[oaicite:1]{index=1} with the :contentReference[oaicite:2]{index=2} to generate socially compliant trajectories.
 
 ---
 
-## Technical Architecture
+# Key Features
+
+## Vision-Integrated Perception
+- Real-time person detection using YOLOv11n
+- RGB + Depth fusion for 3D localization
+- Conversion of detections into navigation-relevant spatial coordinates
+
+## Social Costmap Injection
+- Virtual obstacle generation from human detections
+- Injection into ROS 2 costmap as dynamic obstacles
+- Human-aware “social inflation layer”
+
+## Navigation Stack
+- Global Planner: A*
+- Local Planner: TEB (Timed Elastic Band)
+- Smooth and reactive trajectory execution
+
+## Simulation Environment
+- :contentReference[oaicite:3]{index=3} for physics simulation
+- :contentReference[oaicite:4]{index=4} for real-time visualization
+
+---
+
+# System Architecture
 
 - **Robot Platform:** :contentReference[oaicite:5]{index=5}  
-- **Framework:** ROS 2 (Humble) + Nav2 stack  
-- **Detection Model:** YOLOv11n (low-latency inference)  
-- **Planner Stack:**
-  - Global Planner → A*
-  - Local Planner → TEB (Timed Elastic Band)  
-- **Simulation World:** PAL Office Gazebo environment  
+- **Framework:** ROS 2 Humble  
+- **Detection Model:** YOLOv11n  
+- **Sensors:**
+  - RGB camera
+  - Depth camera  
+- **Output:**
+  - Virtual `/human_detection_scan` topic (LaserScan)
+  - Dynamic costmap updates for Nav2  
 
 ---
 
-## Methodology
+# Methodology
 
-The system treats the **costmap as a spatial reasoning layer ("robot brain")**, where:
+The system transforms vision detections into navigation constraints:
 
-- `0` → Free space  
-- `254` → Lethal obstacle  
+### Pipeline
 
-Instead of treating all obstacles equally, the system introduces a **semantic separation**:
-
-### 1. Static Layer
-- Walls, furniture, and fixed objects  
-- Hard constraints for navigation  
-
-### 2. Social Inflation Layer
-- Humans detected via YOLO  
-- Soft, dynamic cost regions  
-- Adjustable “comfort zones” around people  
-
-This separation avoids over-inflation of the environment, preventing narrow corridors from becoming impassable while still maintaining safe human distances.
+1. RGB image → YOLO person detection  
+2. Depth image → distance estimation  
+3. Pixel → 3D spatial projection  
+4. Detection → Virtual LaserScan generation  
+5. LaserScan → costmap injection  
+6. Nav2 → dynamic replanning  
 
 ---
 
-## Behavioral Outcome
+# Advanced Detector Node
 
-The resulting robot behavior is:
+## File: `advancedYoloDetector.py`
 
-- Predictable in human environments  
-- Respectful of personal space  
-- Capable of smooth trajectory adaptation  
-- Robust in dynamic scenarios with moving people  
-
-This significantly improves **human trust, comfort, and acceptance** in shared spaces.
+### Purpose
+A ROS 2 node that detects humans and injects them into the navigation stack as dynamic obstacles.
 
 ---
 
-## Automation Scripts
+### Behavior
 
-### advancedDetector.sh
+- Subscribes to:
+  - `/head_front_camera/rgb/image_raw`
+  - `/head_front_camera/depth/image_raw`
 
-This script launches the YOLO-based detection pipeline inside a Docker-based ROS 2 simulation container.
+- Publishes:
+  - `/human_detection_scan` (LaserScan)
 
-Key functions:
-- Verifies container status (`tiago_sim`)
-- Enters ROS 2 workspace
-- Sources ROS 2 Humble environment  
-- Executes detection node:
-  - `advancedYoloDetector.py`
-- Ensures simulation time synchronization (`use_sim_time:=true`)
-
-Core role:
-> Runs the real-time perception layer of the social navigation system.
+- Uses YOLOv11n to detect people in real time
+- Uses depth camera to estimate distance
+- Converts detections into angular laser slices
+- Injects synthetic obstacles into Nav2 costmap
 
 ---
 
-### advancedNavigation.sh
+### Core Python Dependencies
 
-This script initializes the full navigation simulation environment.
-
-Key steps:
-
-#### 1. System Cleanup
-- Terminates:
-  - Gazebo
-  - RViz
-  - ROS 2 processes  
-- Removes existing Docker container  
-
-#### 2. GUI Permissions
-- Enables X11 forwarding for Docker GUI applications  
-
-#### 3. Simulation Launch
-Runs the :contentReference[oaicite:6]{index=6} launch system with:
-- TIAGo Pro robot in Gazebo  
-- Omni-directional base  
-- Navigation enabled  
-- PAL Office world loaded  
-
----
-
-## System Pipeline
-
-1. Camera stream → YOLOv11 detection  
-2. Detection → 3D costmap injection  
-3. Costmap layering → static + social inflation  
-4. Nav2 planning:
-   - Global path (A*)
-   - Local refinement (TEB)  
-5. Robot executes socially-aware trajectory  
-
----
-
-## Summary
-
-This project demonstrates a **human-centric evolution of robot navigation**, where motion planning is no longer purely geometric, but also **socially contextual**.
-
-It bridges:
-- Computer Vision  
-- ROS 2 Robotics  
-- Human-aware AI planning  
-- Real-time simulation systems  
-
-The result is a navigation system that behaves not just efficiently, but appropriately in shared human environments.
-
----
+```bash
+pip install numpy
+pip install opencv-python
+pip install ultralytics
+pip install rclpy
+pip install cv_bridge
