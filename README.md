@@ -113,7 +113,7 @@ sudo apt install ros-humble-vision-opencv
 
 # Installation Guide (Full System Setup)
 
-## Step 1 Create Workspace
+## Step 1: Create Workspace
 
 ```bash
 mkdir -p ~/tiago_ws/src
@@ -122,7 +122,7 @@ cd ~/tiago_ws/src
 
 ---
 
-## Step 2 Clone TIAGo Pro Official Packages
+## Step 2: Clone TIAGo Pro Official Packages
 
 ```bash
 git clone https://github.com/pal-robotics/tiago_simulation.git
@@ -133,7 +133,7 @@ git clone https://github.com/pal-robotics/pal_gazebo_plugins.git
 
 ---
 
-## Step 3 Install Dependencies
+## Step 3: Install Dependencies
 
 ```bash
 cd ~/tiago_ws
@@ -142,7 +142,7 @@ rosdep install --from-paths src --ignore-src -r -y
 
 ---
 
-## Step 4 Build Workspace
+## Step 4: Build Workspace
 
 ```bash
 colcon build
@@ -151,7 +151,7 @@ source install/setup.bash
 
 ---
 
-## Step 5 Launch Simulation (Gazebo + Nav2)
+## Step 5: Launch Simulation (Gazebo + Nav2)
 
 ```bash
 ros2 launch tiago_gazebo tiago_gazebo.launch.py \
@@ -163,7 +163,7 @@ ros2 launch tiago_gazebo tiago_gazebo.launch.py \
 
 ---
 
-## Step 6 Run Advanced YOLO Detector
+## Step 6: Run Advanced YOLO Detector
 
 ```bash
 python3 advancedYoloDetector.py --ros-args -p use_sim_time:=true
@@ -171,7 +171,7 @@ python3 advancedYoloDetector.py --ros-args -p use_sim_time:=true
 
 ---
 
-## Step 7 Docker Execution (Optional)
+## Step 7: Docker Execution (Optional)
 
 ### Start Simalation
 
@@ -191,23 +191,23 @@ bash advancedDetector.sh
 
 ## advancedNavigation.sh
 
-Cleans Gazebo, RViz, ROS processes
-Launches TIAGo Pro simulation container
-Loads PAL Office world
-Enables Nav2 navigation stack
-Sets up GUI forwarding (X11)
+- Cleans Gazebo, RViz, ROS processes
+- Launches TIAGo Pro simulation container
+- Loads PAL Office world
+- Enables Nav2 navigation stack
+- Sets up GUI forwarding (X11)
 
 ## advancedDetector.sh
 
-Checks running Docker container (tiago_sim)
-Enters ROS 2 workspace
-Sources ROS environment
+- Checks running Docker container (tiago_sim)
+- Enters ROS 2 workspace
+- Sources ROS environment
 Runs:
 
 ```bash
 ./advancedYoloDetector.py
 ```
-Enables synchronized simulation time
+- Enables synchronized simulation time
 
 # System Behavior
 
@@ -224,21 +224,21 @@ When running correctly:
 
 The robot demonstrates socially-aware navigation, characterized by:
 
-Maintaining safe distances from humans
-Smooth trajectory adaptation
-Predictable and non-intrusive motion
-Real-time environment awareness
-Seamless integration of perception and planning
+- Maintaining safe distances from humans
+- Smooth trajectory adaptation
+- Predictable and non-intrusive motion
+- Real-time environment awareness
+- Seamless integration of perception and planning
 
 # Summary
 
 This project combines:
 
-Computer Vision (YOLOv11)
-ROS 2 Navigation (Nav2)
-3D Simulation (Gazebo + RViz)
-Depth-based perception
-Social costmap engineering
-Real-time robotic control
+- Computer Vision (YOLOv11)
+- ROS 2 Navigation (Nav2)
+- 3D Simulation (Gazebo + RViz)
+- Depth-based perception
+- Social costmap engineering
+- Real-time robotic control
 
 The result is a human-aware autonomous navigation system capable of operating safely and naturally in shared human environments.
