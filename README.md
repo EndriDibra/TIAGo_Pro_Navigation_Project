@@ -9,11 +9,11 @@
 
 ## Project Overview
 
-This project implements a **social navigation framework** for the :contentReference[oaicite:0]{index=0} in a **ROS 2, Gazebo, and RViz simulation environment**.
+This project implements a **social navigation framework** in a **ROS 2, Gazebo, and RViz simulation environment**.
 
 The goal is to extend classical robotic navigation into **human-aware motion planning**, where the robot adapts its path based on social context rather than purely geometric constraints.
 
-The system integrates real-time perception using :contentReference[oaicite:1]{index=1} with the :contentReference[oaicite:2]{index=2} to generate socially compliant trajectories.
+The system integrates real-time perception to generate socially compliant trajectories.
 
 ---
 
@@ -35,14 +35,14 @@ The system integrates real-time perception using :contentReference[oaicite:1]{in
 - Smooth and reactive trajectory execution
 
 ## Simulation Environment
-- :contentReference[oaicite:3]{index=3} for physics simulation
-- :contentReference[oaicite:4]{index=4} for real-time visualization
+- **Gazebo** for physics simulation
+- **RViz** for real-time visualization
 
 ---
 
 # System Architecture
 
-- **Robot Platform:** :contentReference[oaicite:5]{index=5}  
+- **Robot Platform:** TIAGo Pro from PAL 
 - **Framework:** ROS 2 Humble  
 - **Detection Model:** YOLOv11n  
 - **Sensors:**
@@ -191,23 +191,23 @@ bash advancedDetector.sh
 
 ## advancedNavigation.sh
 
-. Cleans Gazebo, RViz, ROS processes
-. Launches TIAGo Pro simulation container
-. Loads PAL Office world
-. Enables Nav2 navigation stack
-. Sets up GUI forwarding (X11)
+Cleans Gazebo, RViz, ROS processes
+Launches TIAGo Pro simulation container
+Loads PAL Office world
+Enables Nav2 navigation stack
+Sets up GUI forwarding (X11)
 
 ## advancedDetector.sh
 
-. Checks running Docker container (tiago_sim)
-. Enters ROS 2 workspace
-. Sources ROS environment
+Checks running Docker container (tiago_sim)
+Enters ROS 2 workspace
+Sources ROS environment
 Runs:
 
 ```bash
 ./advancedYoloDetector.py
 ```
-. Enables synchronized simulation time
+Enables synchronized simulation time
 
 # System Behavior
 
@@ -224,21 +224,21 @@ When running correctly:
 
 The robot demonstrates socially-aware navigation, characterized by:
 
-. Maintaining safe distances from humans
-. Smooth trajectory adaptation
-. Predictable and non-intrusive motion
-. Real-time environment awareness
-. Seamless integration of perception and planning
+Maintaining safe distances from humans
+Smooth trajectory adaptation
+Predictable and non-intrusive motion
+Real-time environment awareness
+Seamless integration of perception and planning
 
 # Summary
 
 This project combines:
 
-. Computer Vision (YOLOv11)
-. ROS 2 Navigation (Nav2)
-. 3D Simulation (Gazebo + RViz)
-. Depth-based perception
-. Social costmap engineering
-. Real-time robotic control
+Computer Vision (YOLOv11)
+ROS 2 Navigation (Nav2)
+3D Simulation (Gazebo + RViz)
+Depth-based perception
+Social costmap engineering
+Real-time robotic control
 
 The result is a human-aware autonomous navigation system capable of operating safely and naturally in shared human environments.
