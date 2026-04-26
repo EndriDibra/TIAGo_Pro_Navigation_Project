@@ -112,3 +112,133 @@ sudo apt install ros-humble-vision-opencv
 ---
 
 # Installation Guide (Full System Setup)
+
+## Step 1 Create Workspace
+
+```bash
+mkdir -p ~/tiago_ws/src
+cd ~/tiago_ws/src
+```
+
+---
+
+## Step 2 Clone TIAGo Pro Official Packages
+
+```bash
+git clone https://github.com/pal-robotics/tiago_simulation.git
+git clone https://github.com/pal-robotics/tiago_robot.git
+git clone https://github.com/pal-robotics/pal_navigation_msgs.git
+git clone https://github.com/pal-robotics/pal_gazebo_plugins.git
+```
+
+---
+
+## Step 3 Install Dependencies
+
+```bash
+cd ~/tiago_ws
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+---
+
+## Step 4 Build Workspace
+
+```bash
+colcon build
+source install/setup.bash
+```
+
+---
+
+## Step 5 Launch Simulation (Gazebo + Nav2)
+
+```bash
+ros2 launch tiago_gazebo tiago_gazebo.launch.py \
+  base_type:=omni_base \
+  navigation:=True \
+  is_public_sim:=True \
+  world_name:=pal_office
+```
+
+---
+
+## Step 6 Run Advanced YOLO Detector
+
+```bash
+python3 advancedYoloDetector.py --ros-args -p use_sim_time:=true
+```
+
+---
+
+## Step 7 Docker Execution (Optional)
+
+### Start Simalation
+
+```bash
+bash advancedNavigation.sh
+```
+
+### Start Detector Node
+
+```bash
+bash advancedDetector.sh
+```
+
+---
+
+# Docker Scripts
+
+## advancedNavigation.sh
+
+. Cleans Gazebo, RViz, ROS processes
+. Launches TIAGo Pro simulation container
+. Loads PAL Office world
+. Enables Nav2 navigation stack
+. Sets up GUI forwarding (X11)
+
+## advancedDetector.sh
+
+. Checks running Docker container (tiago_sim)
+. Enters ROS 2 workspace
+. Sources ROS environment
+Runs:
+
+```bash
+./advancedYoloDetector.py
+```
+. Enables synchronized simulation time
+
+# System Behavior
+
+When running correctly:
+
+1. TIAGo Pro moves in Gazebo environment
+2. YOLO detects humans in real time
+3. Depth camera estimates distance
+4. Virtual LaserScan is generated
+5. Nav2 updates costmap dynamically
+6. Robot replans path socially
+
+# Result
+
+The robot demonstrates socially-aware navigation, characterized by:
+
+. Maintaining safe distances from humans
+. Smooth trajectory adaptation
+. Predictable and non-intrusive motion
+. Real-time environment awareness
+. Seamless integration of perception and planning
+
+# Summary
+
+This project combines:
+
+. Computer Vision (YOLOv11)
+. ROS 2 Navigation (Nav2)
+. 3D Simulation (Gazebo + RViz)
+. Depth-based perception
+. Social costmap engineering
+. Real-time robotic control
+
+The result is a human-aware autonomous navigation system capable of operating safely and naturally in shared human environments.
