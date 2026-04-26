@@ -102,3 +102,17 @@ pip install opencv-python
 pip install ultralytics
 pip install rclpy
 pip install cv_bridge
+
+# ROS 2 Dependencies
+sudo apt install ros-humble-nav2-bringup
+sudo apt install ros-humble-sensor-msgs
+sudo apt install ros-humble-cv-bridge
+sudo apt install ros-humble-vision-opencv
+
+
+
+
+
+
+
+
