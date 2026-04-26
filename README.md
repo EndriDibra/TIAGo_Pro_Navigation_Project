@@ -108,11 +108,4 @@ sudo apt install ros-humble-nav2-bringup
 sudo apt install ros-humble-sensor-msgs
 sudo apt install ros-humble-cv-bridge
 sudo apt install ros-humble-vision-opencv
-
-
-
-
-
-
-
-
+```
