@@ -102,18 +102,12 @@ pip install opencv-python
 pip install ultralytics
 pip install rclpy
 pip install cv_bridge
-
-# ROS 2 Dependencies
-sudo apt install ros-humble-nav2-bringup
-sudo apt install ros-humble-sensor-msgs
-sudo apt install ros-humble-cv-bridge
-sudo apt install ros-humble-vision-opencv
 ```
 ---
 
 # Installation Guide (Full System Setup)
 
-## Step 0: Packages Instalations for ROS2 (Humble Distro)
+## Step 0: Packages Installation for ROS2 (Humble Distro)
 
 ```bash
 FROM osrf/ros:humble-desktop
@@ -137,6 +131,9 @@ RUN apt-get update && apt-get install -y \
     ros-humble-teleop-twist-keyboard \
     ros-humble-gazebo-ros-pkgs \
     ros-humble-cartographer-ros \
+    ros-humble-sensor-msgs \
+    ros-humble-cv-bridge \
+    ros-humble-vision-opencv \
     && rm -rf /var/lib/apt/lists/*
 ```
 
