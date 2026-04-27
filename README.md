@@ -94,24 +94,13 @@ A ROS 2 node that detects humans and injects them into the navigation stack as d
 
 ---
 
-### Core Python Dependencies for ROS2 (Humble Distro)
-
-```bash
-pip install numpy
-pip install opencv-python
-pip install ultralytics
-pip install rclpy
-pip install cv_bridge
-```
----
-
 # Installation Guide (Full System Setup)
 
 ---
 
-### Step 1: Open WSL Ubuntu (in PowerShell)
+## Step 1: Open WSL Ubuntu (in PowerShell)
 
-Install the Ubuntu terminal on Windows and Run on a PowerShell Terminal:
+#### Install the Ubuntu terminal on Windows and Run on a PowerShell Terminal:
 
 ```bash
 ubuntu
@@ -121,7 +110,7 @@ ubuntu
 
 ## Step 2: Build the Docker Image (in Ubuntu)
 
-Inside the WSL terminal, create a Dockerfile and build the image. This installs ROS 2 Humble, PAL Robotics packages, and YOLO AI dependencies.
+#### Inside the WSL terminal, create a Dockerfile and build the image. This installs ROS 2 Humble, PAL Robotics packages, and YOLO AI dependencies
 
 ### Dockerfile: 
 
@@ -184,7 +173,7 @@ docker build -t tiago_pro_image .
 
 ---
 
-### Step 3: Create the Docker Container (in Ubuntu)
+## Step 3: Create the Docker Container (in Ubuntu)
 
 ```bash
 docker create -it \
@@ -198,7 +187,7 @@ docker create -it \
 
 ---
 
-### Step 4: Setup GUI Forwarding-XLaunch (in Windows)
+## Step 4: Setup GUI Forwarding-XLaunch (in Windows)
 
 #### Before running the simulation, install and then start XLaunch on Windows with these settings:
 
@@ -207,7 +196,7 @@ docker create -it \
 - Start no client
 - Check: "Disable access control"
 
-### Step 5: Start the Docker Container (in Ubuntu)
+## Step 5: Start the Docker Container (in Ubuntu)
 
 Check containers:
 
@@ -229,9 +218,9 @@ docker exec -it tiago_sim bash
 
 ---
 
-## Step 5: Prepare Execution Scripts (Inside Docker)
+## Step 6: Prepare Execution Scripts (Inside Docker)
 
-Ensure your scripts are executable
+#### Ensure your scripts are executable
 
 ```bash
 chmod +x advancedNavigation.sh
@@ -240,16 +229,18 @@ chmod +x advancedDetector.sh
 
 ---
 
-## Step 6: Launch the System (Inside Docker)
+## Step 7: Launch the System (Inside Docker)
 
-1. Launch Simulation (Terminal 1)
+#### 1. Launch Simulation (Terminal 1)
+
 Run the navigation script to start Gazebo and the TIAGo Pro navigation stack
 
 ```bash
 ./advancedNavigation.sh
 ```
 
-2. Launch YOLO Detector (Terminal 2)
+#### 2. Launch YOLO Detector (Terminal 2)
+
 Once the simulation is running, open a new terminal and start the AI detection node
 
 ```bash
@@ -258,9 +249,9 @@ Once the simulation is running, open a new terminal and start the AI detection n
 
 ---
 
-## Step 7: VS Code (Inside Docker)
+## Step 8: VS Code (Inside Docker)
 
-To edit your scripts or ROS 2 code directly inside the environment:
+#### To edit the scripts or ROS 2 code directly inside the environment, go and:
 
 - Open VS Code.
 
@@ -285,11 +276,6 @@ To edit your scripts or ROS 2 code directly inside the environment:
 - Checks running Docker container (tiago_sim)
 - Enters ROS 2 workspace
 - Sources ROS environment
-Runs:
-
-```bash
-./advancedYoloDetector.py
-```
 - Enables synchronized simulation time
 
 # System Behavior
