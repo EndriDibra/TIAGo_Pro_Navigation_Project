@@ -113,6 +113,35 @@ sudo apt install ros-humble-vision-opencv
 
 # Installation Guide (Full System Setup)
 
+## Step 0: Packages Instalations for ROS2 (Humble Distro)
+
+```bash
+FROM osrf/ros:humble-desktop
+
+# 1. Install System Dependencies & Tools
+RUN apt-get update && apt-get install -y \
+    python3-colcon-common-extensions \
+    python3-pip \
+    git \
+    wget \
+    python3-rosdep \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. Install TIAGo Pro & Nav2 Dependencies
+RUN apt-get update && apt-get install -y \
+    ros-humble-nav2-bringup \
+    ros-humble-navigation2 \
+    ros-humble-robot-localization \
+    ros-humble-slam-toolbox \
+    ros-humble-twist-mux \
+    ros-humble-teleop-twist-keyboard \
+    ros-humble-gazebo-ros-pkgs \
+    ros-humble-cartographer-ros \
+    && rm -rf /var/lib/apt/lists/*
+```
+
+---
+
 ## Step 1: Create Workspace
 
 ```bash
