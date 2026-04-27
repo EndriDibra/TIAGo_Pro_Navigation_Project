@@ -107,21 +107,35 @@ pip install cv_bridge
 
 # Installation Guide (Full System Setup)
 
-## Step 0: Packages Installation for ROS2 (Humble Distro)
+---
+
+### Step 1: Open WSL Ubuntu (in PowerShell)
+
+Install the Ubuntu terminal on Windows and Run on a PowerShell Terminal:
+
+```bash
+ubuntu
+```
+
+---
+
+## Step 2: Build the Docker Image (in Ubuntu)
+
+Inside the WSL terminal, create a Dockerfile and build the image. This installs ROS 2 Humble, PAL Robotics packages, and YOLO AI dependencies.
+
+### Dockerfile: 
 
 ```bash
 FROM osrf/ros:humble-desktop
 
-# 1. Install System Dependencies & Tools
+# 1. Install System Dependencies & Python Tools
 RUN apt-get update && apt-get install -y \
     python3-colcon-common-extensions \
     python3-pip \
-    git \
-    wget \
-    python3-rosdep \
+    git wget python3-rosdep \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Install TIAGo Pro & Nav2 Dependencies
+# 2. Install TIAGo Pro & Nav2 ROS Dependencies
 RUN apt-get update && apt-get install -y \
     ros-humble-nav2-bringup \
     ros-humble-navigation2 \
@@ -135,83 +149,126 @@ RUN apt-get update && apt-get install -y \
     ros-humble-cv-bridge \
     ros-humble-vision-opencv \
     && rm -rf /var/lib/apt/lists/*
+
+# 3. Install Python AI Dependencies
+RUN pip3 install numpy opencv-python ultralytics
+
+# 4. Create Workspace and Clone TIAGo Packages
+WORKDIR /tiago_ws/src
+RUN git clone https://github.com/pal-robotics/tiago_simulation.git && \
+    git clone https://github.com/pal-robotics/tiago_robot.git && \
+    git clone https://github.com/pal-robotics/pal_navigation_msgs.git && \
+    git clone https://github.com/pal-robotics/pal_gazebo_plugins.git
+
+# 5. Build the Workspace
+WORKDIR /tiago_ws
+RUN . /opt/ros/humble/setup.sh && \
+    rosdep update && \
+    rosdep install --from-paths src --ignore-src -r -y && \
+    colcon build --symlink-install
+
+# 6. Automatic Sourcing
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc \
+    && echo "source /tiago_ws/install/setup.bash" >> ~/.bashrc
+
+CMD ["bash"]
 ```
 
 ---
 
-## Step 1: Create Workspace
+### Build Image:
 
 ```bash
-mkdir -p ~/tiago_ws/src
-cd ~/tiago_ws/src
+docker build -t tiago_pro_image .
 ```
 
 ---
 
-## Step 2: Clone TIAGo Pro Official Packages
+### Step 3: Create the Docker Container (in Ubuntu)
 
 ```bash
-git clone https://github.com/pal-robotics/tiago_simulation.git
-git clone https://github.com/pal-robotics/tiago_robot.git
-git clone https://github.com/pal-robotics/pal_navigation_msgs.git
-git clone https://github.com/pal-robotics/pal_gazebo_plugins.git
+docker create -it \
+    --name tiago_sim \
+    --privileged \
+    --net=host \
+    -e DISPLAY=host.docker.internal:0.0 \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    tiago_pro_image
 ```
 
 ---
 
-## Step 3: Install Dependencies
+### Step 4: Setup GUI Forwarding-XLaunch (in Windows)
+
+#### Before running the simulation, install and then start XLaunch on Windows with these settings:
+
+- Multiple Windows
+- Display Number: 0
+- Start no client
+- Check: "Disable access control"
+
+### Step 5: Start the Docker Container (in Ubuntu)
+
+Check containers:
 
 ```bash
-cd ~/tiago_ws
-rosdep install --from-paths src --ignore-src -r -y
+docker ps -a
+```
+
+Start container:
+
+```bash
+docker start tiago_sim
+```
+
+Enter container:
+
+```bash
+docker exec -it tiago_sim bash
 ```
 
 ---
 
-## Step 4: Build Workspace
+## Step 5: Prepare Execution Scripts (Inside Docker)
+
+Ensure your scripts are executable
 
 ```bash
-colcon build
-source install/setup.bash
+chmod +x advancedNavigation.sh
+chmod +x advancedDetector.sh
 ```
 
 ---
 
-## Step 5: Launch Simulation (Gazebo + Nav2)
+## Step 6: Launch the System (Inside Docker)
+
+1. Launch Simulation (Terminal 1)
+Run the navigation script to start Gazebo and the TIAGo Pro navigation stack
 
 ```bash
-ros2 launch tiago_gazebo tiago_gazebo.launch.py \
-  base_type:=omni_base \
-  navigation:=True \
-  is_public_sim:=True \
-  world_name:=pal_office
+./advancedNavigation.sh
+```
+
+2. Launch YOLO Detector (Terminal 2)
+Once the simulation is running, open a new terminal and start the AI detection node
+
+```bash
+./advancedDetector.sh
 ```
 
 ---
 
-## Step 6: Run Advanced YOLO Detector
+## Step 7: VS Code (Inside Docker)
 
-```bash
-python3 advancedYoloDetector.py --ros-args -p use_sim_time:=true
-```
+To edit your scripts or ROS 2 code directly inside the environment:
 
----
+- Open VS Code.
 
-## Step 7: Docker Execution (Optional)
+- Use the Dev Containers extension.
 
-### Start Simalation
+- Select "Attach to Running Container" -> tiago_sim.
 
-```bash
-bash advancedNavigation.sh
-```
-
-### Start Detector Node
-
-```bash
-bash advancedDetector.sh
-```
-
----
+- Open the folder /tiago_ws/src to begin development.
 
 # Docker Scripts
 
