@@ -253,13 +253,15 @@ Once the simulation is running, open a new terminal and start the AI detection n
 
 #### To edit the scripts or ROS 2 code directly inside the environment, go and:
 
-- Open VS Code.
+- Open VS Code
 
-- Use the Dev Containers extension.
+- Use the Dev Containers extension
 
-- Select "Attach to Running Container" -> tiago_sim.
+- Select "Attach to Running Container" -> tiago_sim
 
-- Open the folder /tiago_ws/src to begin development.
+- Open the folder /tiago_ws/src to begin development
+
+--- 
 
 # Docker Scripts
 
@@ -310,4 +312,4 @@ This project combines:
 - Social costmap engineering
 - Real-time robotic control
 
-The result is a human-aware autonomous navigation system capable of operating safely and naturally in shared human environments.
+The result is a human-aware autonomous navigation system capable of operating safely and naturally in shared human environments
