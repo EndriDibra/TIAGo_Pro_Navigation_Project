@@ -15,6 +15,10 @@ The goal is to extend classical robotic navigation into **human-aware motion pla
 
 The system integrates real-time perception to generate socially compliant trajectories.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f57bc716-85e4-4f87-a139-acb7e02817fd" width="350">
+</p>
+
 ---
 
 # Key Features
