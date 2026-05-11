@@ -21,6 +21,10 @@ The system integrates real-time perception to generate socially compliant trajec
 
 ---
 
+https://github.com/user-attachments/assets/79f84a79-6c65-41d0-b602-30fc81fdf7a0
+
+---
+
 # Key Features
 
 ## Vision-Integrated Perception
